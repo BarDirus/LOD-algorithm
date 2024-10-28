@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpGL.SceneGraph" Version="3.1.1" />
+    <PackageReference Include="SharpGL.Serialization" Version="3.1.1" />
+    <PackageReference Include="SharpGL.WPF" Version="3.1.1" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="UI\SharpGlControl.xaml.cs">
+			<DependentUpon>SharpGlControl.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+</Project>

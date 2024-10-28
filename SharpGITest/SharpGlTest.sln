@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGlTest", "SharpGlTest\SharpGlTest.csproj", "{B6CBF932-B78B-45BA-821A-F5FBDA5E4539}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGlControl", "SharpGlControl\SharpGlControl.csproj", "{9084DF59-4661-4C0A-835E-551BA3875579}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6CBF932-B78B-45BA-821A-F5FBDA5E4539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6CBF932-B78B-45BA-821A-F5FBDA5E4539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6CBF932-B78B-45BA-821A-F5FBDA5E4539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6CBF932-B78B-45BA-821A-F5FBDA5E4539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9084DF59-4661-4C0A-835E-551BA3875579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9084DF59-4661-4C0A-835E-551BA3875579}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9084DF59-4661-4C0A-835E-551BA3875579}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9084DF59-4661-4C0A-835E-551BA3875579}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52E82D8F-CB3F-4BC7-9380-25A105948C06}
+	EndGlobalSection
+EndGlobal

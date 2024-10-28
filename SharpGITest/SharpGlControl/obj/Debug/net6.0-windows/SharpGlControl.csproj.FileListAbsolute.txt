@@ -1,0 +1,17 @@
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\bin\Debug\net6.0-windows\SharpGlControl.deps.json
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\bin\Debug\net6.0-windows\SharpGlControl.dll
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\bin\Debug\net6.0-windows\SharpGlControl.pdb
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\UI\SharpGlSceneControl.g.cs
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl_MarkupCompile.cache
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl_MarkupCompile.lref
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\UI\SharpGlSceneControl.baml
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.g.resources
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.AssemblyInfo.cs
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.dll
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\refint\SharpGlControl.dll
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\SharpGlControl.pdb
+C:\Users\User\Desktop\SharpGlTest\SharpGlControl\obj\Debug\net6.0-windows\ref\SharpGlControl.dll

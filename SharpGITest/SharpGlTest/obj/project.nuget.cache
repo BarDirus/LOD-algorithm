@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "v6CcnXi3XHA=",
+  "success": true,
+  "projectFilePath": "D:\\project\\LOD-algorithm\\SharpGITest\\SharpGlTest\\SharpGlTest.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\sharpgl\\3.1.1\\sharpgl.3.1.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\sharpgl.scenegraph\\3.1.1\\sharpgl.scenegraph.3.1.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\sharpgl.serialization\\3.1.1\\sharpgl.serialization.3.1.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\sharpgl.wpf\\3.1.1\\sharpgl.wpf.3.1.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
