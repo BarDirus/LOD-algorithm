@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using SharpGL;
+using static RubikCubeRenderer;
 
 namespace SharpGLExample
 {
@@ -86,8 +87,8 @@ namespace SharpGLExample
             gl.Rotate(rotationY, 0.0f, 1.0f, 0.0f); // Rotation around Y
 
             // Set the color and draw the cube
-            DrawCube(gl); // Draw the cube
-
+            // Draw the cube
+            RubikCubeRenderer.DrawRubikCube(gl,0.8f, 1);
             gl.Flush(); // Clear the OpenGL command queue and display the current scene
         }
 
@@ -97,24 +98,24 @@ namespace SharpGLExample
         /// </summary>
         private void DrawCube(SharpGL.OpenGL gl)
         {
-            // Start drawing the cube's faces (each face is a square)
+            // Start drawing the cube's faces
             gl.Begin(SharpGL.OpenGL.GL_QUADS);
 
-            // Draw the front face (red)
+            //(red)
             gl.Color(1.0f, 0.0f, 0.0f);
             gl.Vertex(-1.0f, -1.0f, 1.0f);
             gl.Vertex(1.0f, -1.0f, 1.0f);
             gl.Vertex(1.0f, 1.0f, 1.0f);
             gl.Vertex(-1.0f, 1.0f, 1.0f);
 
-            // Draw the back face (green)
+            //(green)
             gl.Color(0.0f, 1.0f, 0.0f);
             gl.Vertex(-1.0f, -1.0f, -1.0f);
             gl.Vertex(1.0f, -1.0f, -1.0f);
             gl.Vertex(1.0f, 1.0f, -1.0f);
             gl.Vertex(-1.0f, 1.0f, -1.0f);
 
-            // Draw the top face (blue)
+            //(blue)
             gl.Color(0.0f, 0.0f, 1.0f);
             gl.Vertex(-1.0f, 1.0f, -1.0f);
             gl.Vertex(1.0f, 1.0f, -1.0f);

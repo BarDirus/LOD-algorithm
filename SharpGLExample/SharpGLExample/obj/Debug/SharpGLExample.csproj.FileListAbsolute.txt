@@ -40,3 +40,24 @@ C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debu
 C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.xml
 C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.xml
 C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.CopyComplete
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.AssemblyReference.cache
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Form1.resources
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Properties.Resources.resources
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.GenerateResource.cache
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.CoreCompileInputs.cache
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.exe
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.pdb
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe.config
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.pdb
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\System.Drawing.Common.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.pdb
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.xml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.xml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.xml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.xml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLE.3FF132BD.Up2Date
