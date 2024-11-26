@@ -1,0 +1,42 @@
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Form1.resources
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Properties.Resources.resources
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.GenerateResource.cache
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe.config
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.pdb
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.dll
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.dll
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.dll
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.dll
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\System.Drawing.Common.dll
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.pdb
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.xml
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.xml
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.xml
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.xml
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLE.3FF132BD.Up2Date
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.exe
+C:\Users\User\source\repos\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.pdb
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.AssemblyReference.cache
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Form1.resources
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.Properties.Resources.resources
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.GenerateResource.cache
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.CoreCompileInputs.cache
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.exe
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.pdb
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe.config
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.exe
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGLExample.pdb
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.dll
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.dll
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.dll
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.dll
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\System.Drawing.Common.dll
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.pdb
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\OpenGL.Net.WinForms.xml
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.xml
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.SceneGraph.xml
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\bin\Debug\SharpGL.WinForms.xml
+C:\Users\nikit\Downloads\Telegram Desktop\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.csproj.CopyComplete
