@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using SharpGL;
-using static RubikCubeRenderer;
+using SharpGL.SceneGraph.Assets; // Used for textures
+using Assimp; // For importing 3D models
 
 namespace SharpGLExample
 {
@@ -12,17 +13,17 @@ namespace SharpGLExample
         private bool isDragging = false; // Flag to check if the mouse is being dragged
         private int lastMouseX; // Last mouse position on the X axis
         private int lastMouseY; // Last mouse position on the Y axis
+        private Assimp.Scene model;
+        private Assimp.Material material;
 
         public Form1()
         {
             InitializeComponent(); // Initialize form components
 
             // Subscribe to the OpenGL draw event, which is triggered each time the screen needs to be refreshed.
-            // The cube is rendered in this method
             openGLControl.OpenGLDraw += OpenGLControl_OpenGLDraw;
 
             // Subscribe to the OpenGL initialization event, triggered once when the OpenGL context is loaded.
-            // This is where the initial scene settings are configured.
             openGLControl.OpenGLInitialized += OpenGLControl_OpenGLInitialized;
 
             // Subscribe to mouse events
@@ -40,7 +41,7 @@ namespace SharpGLExample
             // Get the OpenGL instance for accessing OpenGL library methods
             SharpGL.OpenGL gl = (sender as OpenGLControl).OpenGL;
 
-            // Set the background color with a slight darkening
+            // Set the background color
             gl.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
             // Enable depth testing for correct rendering of 3D objects
@@ -57,93 +58,84 @@ namespace SharpGLExample
             SharpGL.OpenGL gl = (sender as OpenGLControl).OpenGL;
 
             // Clear the screen and the depth buffer
-            // Clears the color buffer and fills it with the color set in gl.ClearColor
-            // Also clears the depth buffer to properly render objects according to their depth
             gl.Clear(SharpGL.OpenGL.GL_COLOR_BUFFER_BIT | SharpGL.OpenGL.GL_DEPTH_BUFFER_BIT);
 
             // Set the projection matrix
-            gl.MatrixMode(SharpGL.OpenGL.GL_PROJECTION); // Matrix controlling the projection of the scene onto the screen
+            gl.MatrixMode(SharpGL.OpenGL.GL_PROJECTION);
 
-            // Reset the current projection matrix, returning it to the identity state
+            // Reset the current projection matrix
             gl.LoadIdentity();
 
             // Set up a perspective projection
-            // 1) Set the field of view to 45 degrees (vertical camera field of view)
-            // 2) Define the aspect ratio of the screen (Width and Height) to avoid distortion
-            // 3) Set the near (0.1) and far (100.0) clipping planes
             gl.Perspective(45.0, (double)Width / (double)Height, 0.1, 100.0);
 
             // Set the view matrix
-            gl.MatrixMode(SharpGL.OpenGL.GL_MODELVIEW); // Matrix for setting the "view" parameters of the scene
-            gl.LoadIdentity(); // Reset the current matrix
+            gl.MatrixMode(SharpGL.OpenGL.GL_MODELVIEW);
+            gl.LoadIdentity();
 
             // Set the camera position, the point it looks at, and the "up" direction
-            gl.LookAt(0, 0, 5,  // Camera position (where it is located)
-                      0, 0, 0,  // Point the camera looks at
-                      0, 1, 0); // "Up" direction (Y axis)
+            gl.LookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 
             // Apply user-defined rotation
             gl.Rotate(rotationX, 1.0f, 0.0f, 0.0f); // Rotation around X
             gl.Rotate(rotationY, 0.0f, 1.0f, 0.0f); // Rotation around Y
 
-            // Set the color and draw the cube
-            // Draw the cube
-            RubikCubeRenderer.DrawRubikCube(gl,0.8f, 1);
-            gl.Flush(); // Clear the OpenGL command queue and display the current scene
+            if (model != null)
+            {
+                DrawModel(gl, model);
+            }
+
+            // Draw the scene
+            gl.Flush();
+        }
+
+        private void LoadModelButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "3D Models|*.obj"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                AssimpContext importer = new AssimpContext();
+                model = importer.ImportFile(openFileDialog.FileName, PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace);
+            }
         }
 
         /// <summary>
-        /// Method for drawing the cube
-        /// The cube has dimensions 2x2x2, and its center is at the origin of the coordinates
+        /// Method for drawing the 3D model.
         /// </summary>
-        private void DrawCube(SharpGL.OpenGL gl)
+        private void DrawModel(SharpGL.OpenGL gl, Assimp.Scene model)
         {
-            // Start drawing the cube's faces
-            gl.Begin(SharpGL.OpenGL.GL_QUADS);
+            foreach (var mesh in model.Meshes)
+            {
+                // Iterate over model faces
+                foreach (var face in mesh.Faces)
+                {
+                    // Get the material index for this face
+                    var materialIndex = mesh.MaterialIndex;
 
-            //(red)
-            gl.Color(1.0f, 0.0f, 0.0f);
-            gl.Vertex(-1.0f, -1.0f, 1.0f);
-            gl.Vertex(1.0f, -1.0f, 1.0f);
-            gl.Vertex(1.0f, 1.0f, 1.0f);
-            gl.Vertex(-1.0f, 1.0f, 1.0f);
+                    // Check if the material index is valid
+                    if (materialIndex >= 0 && materialIndex < model.Materials.Count)
+                    {
+                        var mat = model.Materials[materialIndex];
+                        var diffuseColor = mat.ColorDiffuse;
 
-            //(green)
-            gl.Color(0.0f, 1.0f, 0.0f);
-            gl.Vertex(-1.0f, -1.0f, -1.0f);
-            gl.Vertex(1.0f, -1.0f, -1.0f);
-            gl.Vertex(1.0f, 1.0f, -1.0f);
-            gl.Vertex(-1.0f, 1.0f, -1.0f);
+                        // Set the material color for this face
+                        gl.Color(diffuseColor.R, diffuseColor.G, diffuseColor.B);
+                    }
 
-            //(blue)
-            gl.Color(0.0f, 0.0f, 1.0f);
-            gl.Vertex(-1.0f, 1.0f, -1.0f);
-            gl.Vertex(1.0f, 1.0f, -1.0f);
-            gl.Vertex(1.0f, 1.0f, 1.0f);
-            gl.Vertex(-1.0f, 1.0f, 1.0f);
-
-            // Draw the bottom face (yellow)
-            gl.Color(1.0f, 1.0f, 0.0f);
-            gl.Vertex(-1.0f, -1.0f, -1.0f);
-            gl.Vertex(1.0f, -1.0f, -1.0f);
-            gl.Vertex(1.0f, -1.0f, 1.0f);
-            gl.Vertex(-1.0f, -1.0f, 1.0f);
-
-            // Draw the right face (purple)
-            gl.Color(1.0f, 0.0f, 1.0f);
-            gl.Vertex(1.0f, -1.0f, -1.0f);
-            gl.Vertex(1.0f, 1.0f, -1.0f);
-            gl.Vertex(1.0f, 1.0f, 1.0f);
-            gl.Vertex(1.0f, -1.0f, 1.0f);
-
-            // Draw the left face (cyan)
-            gl.Color(0.0f, 1.0f, 1.0f);
-            gl.Vertex(-1.0f, -1.0f, -1.0f);
-            gl.Vertex(-1.0f, 1.0f, -1.0f);
-            gl.Vertex(-1.0f, 1.0f, 1.0f);
-            gl.Vertex(-1.0f, -1.0f, 1.0f);
-
-            gl.End(); // End the cube drawing
+                    // Draw triangles for this face
+                    gl.Begin(SharpGL.OpenGL.GL_TRIANGLES);
+                    foreach (var index in face.Indices)
+                    {
+                        var vertex = mesh.Vertices[index];
+                        gl.Vertex(vertex.X, vertex.Y, vertex.Z);
+                    }
+                    gl.End();
+                }
+            }
         }
 
         // Mouse down event

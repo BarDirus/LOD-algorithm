@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-
             this.openGLControl = new SharpGL.OpenGLControl();
+            this.LoadModelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl)).BeginInit();
             this.SuspendLayout();
             // 
@@ -38,27 +38,36 @@
             this.openGLControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.openGLControl.DrawFPS = false;
             this.openGLControl.Location = new System.Drawing.Point(0, 0);
-            this.openGLControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.openGLControl.Name = "openGLControl";
             this.openGLControl.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL2_1;
             this.openGLControl.RenderContextType = SharpGL.RenderContextType.DIBSection;
             this.openGLControl.RenderTrigger = SharpGL.RenderTrigger.TimerBased;
-            this.openGLControl.Size = new System.Drawing.Size(800, 450);
+            this.openGLControl.Size = new System.Drawing.Size(600, 366);
             this.openGLControl.TabIndex = 0;
             this.openGLControl.Load += new System.EventHandler(this.openGLControl1_Load_1);
-
-            // Mouse control
             this.openGLControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OpenGLControl_MouseDown);
             this.openGLControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OpenGLControl_MouseMove);
             this.openGLControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OpenGLControl_MouseUp);
-
+            // 
+            // LoadModelButton
+            // 
+            this.LoadModelButton.Location = new System.Drawing.Point(525, 343);
+            this.LoadModelButton.Name = "LoadModelButton";
+            this.LoadModelButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadModelButton.TabIndex = 1;
+            this.LoadModelButton.Tag = "";
+            this.LoadModelButton.Text = "Load Model";
+            this.LoadModelButton.UseVisualStyleBackColor = true;
+            this.LoadModelButton.Click += new System.EventHandler(this.LoadModelButton_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.LoadModelButton);
             this.Controls.Add(this.openGLControl);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -70,6 +79,7 @@
         #endregion
 
         private SharpGL.OpenGLControl openGLControl;
+        private System.Windows.Forms.Button LoadModelButton;
     }
 }
 
