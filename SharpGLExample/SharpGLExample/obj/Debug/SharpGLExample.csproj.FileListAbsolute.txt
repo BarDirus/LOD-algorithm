@@ -90,3 +90,11 @@ C:\Users\nikit\Source\Repos\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debu
 C:\Users\nikit\Source\Repos\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\AssimpNet.xml
 C:\Users\nikit\Source\Repos\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\UserControl1.baml
 C:\Users\nikit\Source\Repos\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.g.resources
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\AssimpNet.dll
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\bin\Debug\AssimpNet.xml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\UserControl1.g.cs
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample_Content.g.cs
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample_MarkupCompile.cache
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample_MarkupCompile.lref
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\UserControl1.baml
+D:\project\LOD-algorithm\SharpGLExample\SharpGLExample\obj\Debug\SharpGLExample.g.resources

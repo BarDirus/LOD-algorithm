@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using SharpGL;
-using SharpGL.SceneGraph.Assets; // Used for textures
 using Assimp; // For importing 3D models
 
 namespace SharpGLExample
@@ -15,7 +14,7 @@ namespace SharpGLExample
         private int lastMouseY; // Last mouse position on the Y axis
         private Assimp.Scene model;
         private Assimp.Material material;
-
+        static SharpGL.OpenGL gl;
         public Form1()
         {
             InitializeComponent(); // Initialize form components
@@ -39,7 +38,7 @@ namespace SharpGLExample
         private void OpenGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             // Get the OpenGL instance for accessing OpenGL library methods
-            SharpGL.OpenGL gl = (sender as OpenGLControl).OpenGL;
+            gl = (sender as OpenGLControl).OpenGL;
 
             // Set the background color
             gl.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -55,7 +54,7 @@ namespace SharpGLExample
         private void OpenGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {
             // Get the OpenGL instance for accessing OpenGL library methods
-            SharpGL.OpenGL gl = (sender as OpenGLControl).OpenGL;
+            gl = (sender as OpenGLControl).OpenGL;
 
             // Clear the screen and the depth buffer
             gl.Clear(SharpGL.OpenGL.GL_COLOR_BUFFER_BIT | SharpGL.OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -100,6 +99,15 @@ namespace SharpGLExample
             {
                 AssimpContext importer = new AssimpContext();
                 model = importer.ImportFile(openFileDialog.FileName, PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace);
+                
+            }
+        }
+        private void VoxelizeTrigger_Click(object sender, EventArgs e)
+        {
+            if (model != null)
+            {
+                
+                Voxelization.VoxelizeModel(gl, model, 0.1f);
             }
         }
 
