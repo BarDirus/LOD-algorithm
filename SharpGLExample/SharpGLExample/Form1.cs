@@ -15,6 +15,8 @@ namespace SharpGLExample
         private Assimp.Scene model;
         private Assimp.Material material;
         static SharpGL.OpenGL gl;
+
+        bool voxelize; //signal to start voxelazation
         public Form1()
         {
             InitializeComponent(); // Initialize form components
@@ -39,7 +41,7 @@ namespace SharpGLExample
         {
             // Get the OpenGL instance for accessing OpenGL library methods
             gl = (sender as OpenGLControl).OpenGL;
-
+            voxelize = false;
             // Set the background color
             gl.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -82,6 +84,10 @@ namespace SharpGLExample
             if (model != null)
             {
                 DrawModel(gl, model);
+                if (voxelize) 
+                { 
+                Voxelization.VoxelizeModel(gl, model, 0.1f);
+                }
             }
 
             // Draw the scene
@@ -99,6 +105,7 @@ namespace SharpGLExample
             {
                 AssimpContext importer = new AssimpContext();
                 model = importer.ImportFile(openFileDialog.FileName, PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace);
+                voxelize = false;
                 
             }
         }
@@ -106,8 +113,7 @@ namespace SharpGLExample
         {
             if (model != null)
             {
-                
-                Voxelization.VoxelizeModel(gl, model, 0.1f);
+                voxelize = true;
             }
         }
 

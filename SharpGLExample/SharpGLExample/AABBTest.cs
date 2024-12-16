@@ -5,131 +5,126 @@ namespace SharpGLExample
 {
     internal class AABBTest
     {
-        public static bool TriangleIntersectsVoxel(Vector3D v1, Vector3D v2, Vector3D v3,
-                                     float voxelCenterX, float voxelCenterY, float voxelCenterZ,
-                                     float voxelSize)
+        private const float Epsilon = 1e-3f;
+
+        public static bool AABBTriangleIntersect(Vector3D voxelMin, Vector3D voxelMax, Vector3D v1, Vector3D v2, Vector3D v3)
         {
-            // Step 1: Define the voxel as an AABB (Axis-Aligned Bounding Box)
-            float halfSize = voxelSize / 2;
-
-            Vector3D voxelMin = new Vector3D(
-                voxelCenterX - halfSize,
-                voxelCenterY - halfSize,
-                voxelCenterZ - halfSize
-            );
-
-            Vector3D voxelMax = new Vector3D(
-                voxelCenterX + halfSize,
-                voxelCenterY + halfSize,
-                voxelCenterZ + halfSize
-            );
-
-            // Step 2: Perform an AABB-Triangle Intersection Test
-            return AABBTriangleIntersect(voxelMin, voxelMax, v1, v2, v3);
-        }
-
-        // Helper method to check intersection between an AABB and a triangle
-        private static bool AABBTriangleIntersect(Vector3D boxMin, Vector3D boxMax,
-                                           Vector3D v1, Vector3D v2, Vector3D v3)
-        {
-            // Step 1: Test the AABB's overlap with the triangle's bounding box
-            Vector3D triMin = new Vector3D(
-                Math.Min(v1.X, Math.Min(v2.X, v3.X)),
-                Math.Min(v1.Y, Math.Min(v2.Y, v3.Y)),
-                Math.Min(v1.Z, Math.Min(v2.Z, v3.Z))
-            );
-
-            Vector3D triMax = new Vector3D(
-                Math.Max(v1.X, Math.Max(v2.X, v3.X)),
-                Math.Max(v1.Y, Math.Max(v2.Y, v3.Y)),
-                Math.Max(v1.Z, Math.Max(v2.Z, v3.Z))
-            );
-
-            // If the triangle's bounding box doesn't overlap the AABB, no intersection
-            if (triMax.X < boxMin.X || triMin.X > boxMax.X ||
-                triMax.Y < boxMin.Y || triMin.Y > boxMax.Y ||
-                triMax.Z < boxMin.Z || triMin.Z > boxMax.Z)
-            {
-                return false;
-            }
-
-            // Step 2: Test the triangle's vertices against the AABB
-            if (PointInsideAABB(v1, boxMin, boxMax) ||
-                PointInsideAABB(v2, boxMin, boxMax) ||
-                PointInsideAABB(v3, boxMin, boxMax))
+            // 1. Проверяем, находится ли какая-либо вершина треугольника внутри AABB
+            if (IsPointInsideAABB(voxelMin, voxelMax, v1) ||
+                IsPointInsideAABB(voxelMin, voxelMax, v2) ||
+                IsPointInsideAABB(voxelMin, voxelMax, v3))
             {
                 return true;
             }
 
-            // Step 3: Test the triangle edges against the AABB faces
-            Vector3D[] edges = { v2 - v1, v3 - v2, v1 - v3 };
-            Vector3D[] boxAxes = { new Vector3D(1, 0, 0), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1) };
+            // 2. Проверяем, пересекает ли плоскость треугольника AABB
+            Vector3D normal = CrossProduct(v2 - v1, v3 - v1);
+            float d = -DotProduct(normal, v1);
 
-            foreach (var edge in edges)
+            if (!IsPlaneIntersectingAABB(voxelMin, voxelMax, normal, d))
             {
-                foreach (var axis in boxAxes)
+                return false;
+            }
+
+            // 3. Проверяем пересечение рёбер треугольника с рёбрами AABB
+            Vector3D[] triangleEdges = { v2 - v1, v3 - v2, v1 - v3 };
+            Vector3D[] aabbEdges =
+            {
+            new Vector3D(1, 0, 0),
+            new Vector3D(0, 1, 0),
+            new Vector3D(0, 0, 1)
+        };
+
+            foreach (var edge in triangleEdges)
+            {
+                foreach (var axis in aabbEdges)
                 {
-                    if (!OverlapOnAxis(boxMin, boxMax, v1, v2, v3, Vector3D.Cross(edge, axis)))
+                    Vector3D testAxis = CrossProduct(edge, axis);
+                    if (!IsSeparatingAxis(testAxis, voxelMin, voxelMax, v1, v2, v3))
                     {
                         return false;
                     }
                 }
             }
 
-            // Step 4: Test the triangle's plane against the AABB
-            Vector3D normal = Vector3D.Cross(v2 - v1, v3 - v1);
-            if (!PlaneAABBOverlap(normal, v1, boxMin, boxMax))
-            {
-                return false;
-            }
-
-            // If all tests pass, there is an intersection
+            // Если все тесты пройдены, треугольник пересекает AABB
             return true;
         }
 
-        // Check if a point is inside an AABB
-        private static bool PointInsideAABB(Vector3D point, Vector3D boxMin, Vector3D boxMax)
+        private static bool IsPointInsideAABB(Vector3D min, Vector3D max, Vector3D point)
         {
-            return (point.X >= boxMin.X && point.X <= boxMax.X &&
-                    point.Y >= boxMin.Y && point.Y <= boxMax.Y &&
-                    point.Z >= boxMin.Z && point.Z <= boxMax.Z);
+            return point.X > min.X && point.X < max.X &&
+                   point.Y > min.Y && point.Y < max.Y &&
+                   point.Z > min.Z && point.Z < max.Z;
         }
 
-        // Check if projections overlap on a given axis
-        private static bool OverlapOnAxis(Vector3D boxMin, Vector3D boxMax, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D axis)
+        private static bool IsPlaneIntersectingAABB(Vector3D min, Vector3D max, Vector3D normal, float d)
         {
-            // Project the AABB onto the axis
-            float boxProjection = Math.Abs(axis.X * (boxMax.X - boxMin.X) / 2) +
-                                  Math.Abs(axis.Y * (boxMax.Y - boxMin.Y) / 2) +
-                                  Math.Abs(axis.Z * (boxMax.Z - boxMin.Z) / 2);
+            Vector3D positive = new Vector3D(
+                normal.X > 0 ? max.X : min.X,
+                normal.Y > 0 ? max.Y : min.Y,
+                normal.Z > 0 ? max.Z : min.Z
+            );
 
-            // Project the triangle onto the axis
-            float triProjectionMin = Vector3D.Dot(axis, v1);
-            float triProjectionMax = triProjectionMin;
+            Vector3D negative = new Vector3D(
+                normal.X > 0 ? min.X : max.X,
+                normal.Y > 0 ? min.Y : max.Y,
+                normal.Z > 0 ? min.Z : max.Z
+            );
 
-            triProjectionMin = Math.Min(triProjectionMin, Vector3D.Dot(axis, v2));
-            triProjectionMin = Math.Min(triProjectionMin, Vector3D.Dot(axis, v3));
+            float positiveDistance = DotProduct(normal, positive) + d;
+            float negativeDistance = DotProduct(normal, negative) + d;
 
-            triProjectionMax = Math.Max(triProjectionMax, Vector3D.Dot(axis, v2));
-            triProjectionMax = Math.Max(triProjectionMax, Vector3D.Dot(axis, v3));
-
-            // Check for overlap
-            return !(triProjectionMin > boxProjection || triProjectionMax < -boxProjection);
+            return positiveDistance >= -Epsilon && negativeDistance <= Epsilon;
         }
 
-        // Check for AABB-plane overlap
-        private static bool PlaneAABBOverlap(Vector3D normal, Vector3D pointOnPlane, Vector3D boxMin, Vector3D boxMax)
+        private static bool IsSeparatingAxis(Vector3D axis, Vector3D min, Vector3D max, Vector3D v1, Vector3D v2, Vector3D v3)
         {
-            // Compute the projection interval of the AABB onto the plane normal
-            float boxProjection = Math.Abs(normal.X * (boxMax.X - boxMin.X) / 2) +
-                                  Math.Abs(normal.Y * (boxMax.Y - boxMin.Y) / 2) +
-                                  Math.Abs(normal.Z * (boxMax.Z - boxMin.Z) / 2);
+            if (Math.Abs(axis.X) < Epsilon && Math.Abs(axis.Y) < Epsilon && Math.Abs(axis.Z) < Epsilon)
+            {
+                return true; // Нулевой вектор, нет разделяющей оси
+            }
 
-            // Compute the distance from the AABB center to the plane
-            float planeDistance = Vector3D.Dot(normal, (boxMax + boxMin) / 2 - pointOnPlane);
+            float[] triangleProjections =
+            {
+            DotProduct(axis, v1),
+            DotProduct(axis, v2),
+            DotProduct(axis, v3)
+            };
 
-            // Check for overlap
-            return Math.Abs(planeDistance) <= boxProjection;
+            float triangleMin = Math.Min(triangleProjections[0], Math.Min(triangleProjections[1], triangleProjections[2]));
+            float triangleMax = Math.Max(triangleProjections[0], Math.Max(triangleProjections[1], triangleProjections[2]));
+
+            float[] aabbProjections =
+            {
+            DotProduct(axis, new Vector3D(min.X, min.Y, min.Z)),
+            DotProduct(axis, new Vector3D(max.X, min.Y, min.Z)),
+            DotProduct(axis, new Vector3D(min.X, max.Y, min.Z)),
+            DotProduct(axis, new Vector3D(min.X, min.Y, max.Z)),
+            DotProduct(axis, new Vector3D(max.X, max.Y, min.Z)),
+            DotProduct(axis, new Vector3D(max.X, min.Y, max.Z)),
+            DotProduct(axis, new Vector3D(min.X, max.Y, max.Z)),
+            DotProduct(axis, new Vector3D(max.X, max.Y, max.Z))
+            };
+
+            float aabbMin = Math.Min(aabbProjections[0], Math.Min(aabbProjections[1], aabbProjections[2]));
+            float aabbMax = Math.Max(aabbProjections[0], Math.Max(aabbProjections[1], aabbProjections[2]));
+
+            return triangleMax >= aabbMin && triangleMin <= aabbMax;
+        }
+
+        private static float DotProduct(Vector3D a, Vector3D b)
+        {
+            return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+        }
+
+        private static Vector3D CrossProduct(Vector3D a, Vector3D b)
+        {
+            return new Vector3D(
+                a.Y * b.Z - a.Z * b.Y,
+                a.Z * b.X - a.X * b.Z,
+                a.X * b.Y - a.Y * b.X
+            );
         }
     }
 }

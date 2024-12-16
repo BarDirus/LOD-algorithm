@@ -1,123 +1,130 @@
 ﻿using System;
+using System.Collections.Generic;
+using SharpGL;
+using SharpGL.SceneGraph;
 using Assimp;
+using SharpGLExample;
 
-
-namespace SharpGLExample
+public class Voxelization
 {
-    internal class Voxelization
+    private const float Epsilon = 1e-2f;
+
+    public static void VoxelizeModel(SharpGL.OpenGL gl, Assimp.Scene model, float voxelSize)
     {
-        public static void VoxelizeModel(SharpGL.OpenGL gl, Assimp.Scene model, float voxelSize)
+        // 1. Определяем границы модели
+        Vector3D modelMin = new Vector3D(float.MaxValue, float.MaxValue, float.MaxValue);
+        Vector3D modelMax = new Vector3D(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (var mesh in model.Meshes)
         {
-            // Step 1: Compute the bounding box of the model
-            Vector3D min = new Vector3D(float.MaxValue, float.MaxValue, float.MaxValue);
-            Vector3D max = new Vector3D(float.MinValue, float.MinValue, float.MinValue);
-
-            foreach (var mesh in model.Meshes)
+            foreach (var vertex in mesh.Vertices)
             {
-                foreach (var vertex in mesh.Vertices)
-                {
-                    min.X = Math.Min(min.X, vertex.X);
-                    min.Y = Math.Min(min.Y, vertex.Y);
-                    min.Z = Math.Min(min.Z, vertex.Z);
+                modelMin.X = Math.Min(modelMin.X, vertex.X);
+                modelMin.Y = Math.Min(modelMin.Y, vertex.Y);
+                modelMin.Z = Math.Min(modelMin.Z, vertex.Z);
 
-                    max.X = Math.Max(max.X, vertex.X);
-                    max.Y = Math.Max(max.Y, vertex.Y);
-                    max.Z = Math.Max(max.Z, vertex.Z);
-                }
-            }
-
-            // Step 2: Iterate over the model's faces to fill the voxel grid
-            foreach (var mesh in model.Meshes)
-            {
-                foreach (var face in mesh.Faces)
-                {
-                    // Extract the vertices of the face
-                    var v1 = mesh.Vertices[face.Indices[0]];
-                    var v2 = mesh.Vertices[face.Indices[1]];
-                    var v3 = mesh.Vertices[face.Indices[2]];
-
-                    // Compute the voxel indices that intersect with this face
-                    VoxelizeTriangle(gl, v1, v2, v3, voxelSize, min, max);
-                }
+                modelMax.X = Math.Max(modelMax.X, vertex.X);
+                modelMax.Y = Math.Max(modelMax.Y, vertex.Y);
+                modelMax.Z = Math.Max(modelMax.Z, vertex.Z);
             }
         }
 
-        // Helper method to voxelize a single triangle
-        private static void VoxelizeTriangle(SharpGL.OpenGL gl, Vector3D v1, Vector3D v2, Vector3D v3,
-                                       float voxelSize, Vector3D min, Vector3D max)
+        // Расширяем границы
+        modelMin.X -= Epsilon;
+        modelMin.Y -= Epsilon;
+        modelMin.Z -= Epsilon;
+        modelMax.X += Epsilon;
+        modelMax.Y += Epsilon;
+        modelMax.Z += Epsilon;
+
+        // 2. Генерируем воксельную сетку
+        for (float x = modelMin.X; x <= modelMax.X; x += voxelSize)
         {
-            // Define the voxel grid bounds
-            int gridX = (int)Math.Ceiling((max.X - min.X) / voxelSize);
-            int gridY = (int)Math.Ceiling((max.Y - min.Y) / voxelSize);
-            int gridZ = (int)Math.Ceiling((max.Z - min.Z) / voxelSize);
-
-            // Iterate through the voxel grid and check if each voxel intersects the triangle
-            for (int x = 0; x < gridX; x++)
+            for (float y = modelMin.Y; y <= modelMax.Y; y += voxelSize)
             {
-                for (int y = 0; y < gridY; y++)
+                for (float z = modelMin.Z; z <= modelMax.Z; z += voxelSize)
                 {
-                    for (int z = 0; z < gridZ; z++)
+                    // Проверяем пересечение треугольников с текущим вокселем
+                    if (IsVoxelIntersectingModel(new Vector3D(x, y, z), voxelSize, model))
                     {
-                        // Convert voxel index to world space
-                        float voxelCenterX = min.X + x * voxelSize + voxelSize / 2;
-                        float voxelCenterY = min.Y + y * voxelSize + voxelSize / 2;
-                        float voxelCenterZ = min.Z + z * voxelSize + voxelSize / 2;
-
-                        // Check if voxel intersects the triangle
-                        if (AABBTest.TriangleIntersectsVoxel(v1, v2, v3, voxelCenterX, voxelCenterY, voxelCenterZ, voxelSize))
-                        {
-                            // Render the voxel
-                            DrawVoxel(gl, voxelCenterX, voxelCenterY, voxelCenterZ, voxelSize);
-                        }
+                        DrawVoxel(gl, x, y, z, voxelSize);
                     }
                 }
             }
         }
+    }
 
-        // Method to draw a single voxel
-        public static void DrawVoxel(SharpGL.OpenGL gl, float x, float y, float z, float size)
+    private static bool IsVoxelIntersectingModel(Vector3D voxelCenter, float voxelSize, Assimp.Scene model)
+    {
+        Vector3D voxelMin = new Vector3D(
+            voxelCenter.X - voxelSize / 2,
+            voxelCenter.Y - voxelSize / 2,
+            voxelCenter.Z - voxelSize / 2);
+        Vector3D voxelMax = new Vector3D(
+            voxelCenter.X + voxelSize / 2,
+            voxelCenter.Y + voxelSize / 2,
+            voxelCenter.Z + voxelSize / 2);
+
+        foreach (var mesh in model.Meshes)
         {
-            gl.Begin(SharpGL.OpenGL.GL_QUADS);
+            foreach (var face in mesh.Faces)
+            {
+                // Получаем вершины треугольника
+                Vector3D v1 = mesh.Vertices[face.Indices[0]];
+                Vector3D v2 = mesh.Vertices[face.Indices[1]];
+                Vector3D v3 = mesh.Vertices[face.Indices[2]];
 
-            float halfSize = size / 2;
-
-            // Front face
-            gl.Vertex(x - halfSize, y - halfSize, z + halfSize);
-            gl.Vertex(x + halfSize, y - halfSize, z + halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z + halfSize);
-            gl.Vertex(x - halfSize, y + halfSize, z + halfSize);
-
-            // Back face
-            gl.Vertex(x - halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z - halfSize);
-            gl.Vertex(x - halfSize, y + halfSize, z - halfSize);
-
-            // Left face
-            gl.Vertex(x - halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x - halfSize, y - halfSize, z + halfSize);
-            gl.Vertex(x - halfSize, y + halfSize, z + halfSize);
-            gl.Vertex(x - halfSize, y + halfSize, z - halfSize);
-
-            // Right face
-            gl.Vertex(x + halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y - halfSize, z + halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z + halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z - halfSize);
-
-            // Top face
-            gl.Vertex(x - halfSize, y + halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y + halfSize, z + halfSize);
-            gl.Vertex(x - halfSize, y + halfSize, z + halfSize);
-
-            // Bottom face
-            gl.Vertex(x - halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y - halfSize, z - halfSize);
-            gl.Vertex(x + halfSize, y - halfSize, z + halfSize);
-            gl.Vertex(x - halfSize, y - halfSize, z + halfSize);
-
-            gl.End();
+                // Проверяем пересечение треугольника с вокселем
+                if (AABBTest.AABBTriangleIntersect(voxelMin, voxelMax, v1, v2, v3))
+                {
+                    return true;
+                }
+            }
         }
+        return false;
+    }
+
+
+    private static void DrawVoxel(SharpGL.OpenGL gl, float x, float y, float z, float size)
+    {
+        gl.Begin(SharpGL.OpenGL.GL_QUADS);
+
+        // Front face
+        gl.Vertex(x - size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z + size / 2);
+        gl.Vertex(x - size / 2, y + size / 2, z + size / 2);
+
+        // Back face
+        gl.Vertex(x - size / 2, y - size / 2, z - size / 2);
+        gl.Vertex(x + size / 2, y - size / 2, z - size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z - size / 2);
+        gl.Vertex(x - size / 2, y + size / 2, z - size / 2);
+
+        // Left face
+        gl.Vertex(x - size / 2, y - size / 2, z - size / 2);
+        gl.Vertex(x - size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x - size / 2, y + size / 2, z + size / 2);
+        gl.Vertex(x - size / 2, y + size / 2, z - size / 2);
+
+        // Right face
+        gl.Vertex(x + size / 2, y - size / 2, z - size / 2);
+        gl.Vertex(x + size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z - size / 2);
+
+        // Top face
+        gl.Vertex(x - size / 2, y + size / 2, z - size / 2);
+        gl.Vertex(x - size / 2, y + size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y + size / 2, z - size / 2);
+
+        // Bottom face
+        gl.Vertex(x - size / 2, y - size / 2, z - size / 2);
+        gl.Vertex(x - size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y - size / 2, z + size / 2);
+        gl.Vertex(x + size / 2, y - size / 2, z - size / 2);
+
+        gl.End();
     }
 }
