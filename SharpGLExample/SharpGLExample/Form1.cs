@@ -19,7 +19,7 @@ namespace SharpGLExample
         static SharpGL.OpenGL gl;
 
         bool voxelize; //signal to start voxelazation
-        bool isLightingEnabled;
+        bool isVoxelization;
         public Form1()
         {
             InitializeComponent(); // Initialize form components
@@ -36,7 +36,7 @@ namespace SharpGLExample
             openGLControl.MouseUp += OpenGLControl_MouseUp;
             openGLControl.MouseWheel += OpenGLControl_MouseWheel;
 
-            isLightingEnabled = false;
+            isVoxelization = false;
         }
 
         /// <summary>
@@ -89,13 +89,13 @@ namespace SharpGLExample
 
             if (model != null)
             {
-                if (isLightingEnabled) // ИЗМЕНЕНИЕ: если включено освещение
+                if (isVoxelization) // ИЗМЕНЕНИЕ: если включено освещение
                 {
-                    DrawModelWithLight(gl, model);
+                    DrawModelForVoxelization(gl, model);
                 }
                 else // Если освещение выключено, используем обычную отрисовку
                 {
-                    DrawModel(gl, model);
+                    DrawModelForLoad(gl, model);
 
                     if (voxelize)
                     {
@@ -122,7 +122,7 @@ namespace SharpGLExample
     );
                 voxelize = false;
 
-                isLightingEnabled = true;
+                isVoxelization = true;
                 // Calculate the model center
                 if (model != null && model.Meshes.Count > 0)
                 {
@@ -158,7 +158,7 @@ namespace SharpGLExample
             {
                 voxelize = true;
 
-                isLightingEnabled = false;
+                isVoxelization = false;
 
                 openGLControl.Invalidate(); //???
             }
@@ -167,55 +167,24 @@ namespace SharpGLExample
         /// <summary>
         /// Method for drawing the 3D model.
         /// </summary>
-        private void DrawModel(SharpGL.OpenGL gl, Assimp.Scene model)
+        private void DrawModelForLoad(SharpGL.OpenGL gl, Assimp.Scene model)
         {
-            foreach (var mesh in model.Meshes)
-            {
-                // Iterate over model faces
-                foreach (var face in mesh.Faces)
-                {
-                    // Get the material index for this face
-                    var materialIndex = mesh.MaterialIndex;
-
-                    // Check if the material index is valid
-                    if (materialIndex >= 0 && materialIndex < model.Materials.Count)
-                    {
-                        var mat = model.Materials[materialIndex];
-                        var diffuseColor = mat.ColorDiffuse;
-
-                        // Set the material color for this face
-                        gl.Color(diffuseColor.R, diffuseColor.G, diffuseColor.B);
-                    }
-
-                    // Draw triangles for this face
-                    gl.Begin(SharpGL.OpenGL.GL_TRIANGLES);
-                    foreach (var index in face.Indices)
-                    {
-                        var vertex = mesh.Vertices[index];
-                        gl.Vertex(vertex.X, vertex.Y, vertex.Z);
-                    }
-                    gl.End();
-                }
-            }
-        }
-        private void DrawModelWithLight(SharpGL.OpenGL gl, Assimp.Scene model)
-        {
-            // Включаем освещение и глубину
             gl.Enable(SharpGL.OpenGL.GL_DEPTH_TEST);
             gl.Enable(SharpGL.OpenGL.GL_LIGHTING);
             gl.Enable(SharpGL.OpenGL.GL_LIGHT0); // Включаем первый источник света
+            gl.Enable(SharpGL.OpenGL.GL_LIGHT1);
             gl.Enable(SharpGL.OpenGL.GL_NORMALIZE);
 
             // Устанавливаем свойства источника света
-            float[] lightPosition = { 0.0f, 0.0f, 10.0f, 1.0f }; // Позиция света
-            float[] ambientLight = { 0.2f, 0.2f, 0.2f, 1.0f };   // Фоновое освещение
-            float[] diffuseLight = { 0.8f, 0.8f, 0.8f, 1.0f };   // Диффузное освещение
-            float[] specularLight = { 1.0f, 1.0f, 1.0f, 1.0f };  // Зеркальное освещение
+            float[] lightPosition0 = { 0.0f, 0.0f, 90.0f, 1.0f }; // Позиция света
+            float[] ambientLight0 = { 0.2f, 0.2f, 0.2f, 1.0f };   // Фоновое освещение
+            float[] diffuseLight0 = { 0.8f, 0.8f, 0.8f, 1.0f };   // Диффузное освещение
+            float[] specularLight0 = { 1.0f, 1.0f, 1.0f, 1.0f };  // Зеркальное освещение
 
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_POSITION, lightPosition);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_AMBIENT, ambientLight);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_SPECULAR, specularLight);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_POSITION, lightPosition0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_AMBIENT, ambientLight0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_SPECULAR, specularLight0);
 
             // Устанавливаем материал модели
             float[] materialAmbient = { 0.2f, 0.2f, 0.2f, 1.0f };
@@ -253,6 +222,76 @@ namespace SharpGLExample
             }
             gl.Disable(SharpGL.OpenGL.GL_LIGHTING);
             gl.Disable(SharpGL.OpenGL.GL_LIGHT0);
+            gl.Disable(SharpGL.OpenGL.GL_NORMALIZE);
+        }
+        private void DrawModelForVoxelization(SharpGL.OpenGL gl, Assimp.Scene model)
+        {
+            // Включаем освещение и глубину
+            gl.Enable(SharpGL.OpenGL.GL_DEPTH_TEST);
+            gl.Enable(SharpGL.OpenGL.GL_LIGHTING);
+            gl.Enable(SharpGL.OpenGL.GL_LIGHT0); // Включаем первый источник света
+            gl.Enable(SharpGL.OpenGL.GL_LIGHT1);
+            gl.Enable(SharpGL.OpenGL.GL_NORMALIZE);
+
+            // Устанавливаем свойства источника света
+            float[] lightPosition0 = { 0.0f, 0.0f, 10.0f, 1.0f }; // Позиция света
+            float[] ambientLight0 = { 0.2f, 0.2f, 0.2f, 1.0f };   // Фоновое освещение
+            float[] diffuseLight0 = { 0.8f, 0.8f, 0.8f, 1.0f };   // Диффузное освещение
+            float[] specularLight0 = { 1.0f, 1.0f, 1.0f, 1.0f };  // Зеркальное освещение
+
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_POSITION, lightPosition0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_AMBIENT, ambientLight0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight0);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_SPECULAR, specularLight0);
+
+            // Устанавливаем свойства источника света
+            float[] lightPosition1 = { 0.0f, 0.0f, 50.0f, 1.0f }; // Позиция света
+            float[] ambientLight1 = { 0.2f, 0.2f, 0.2f, 1.0f };   // Фоновое освещение
+            float[] diffuseLight1 = { 0.8f, 0.8f, 0.8f, 1.0f };   // Диффузное освещение
+            float[] specularLight1 = { 1.0f, 1.0f, 1.0f, 1.0f };  // Зеркальное освещение
+
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_POSITION, lightPosition1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_AMBIENT, ambientLight1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_SPECULAR, specularLight1);
+
+            // Устанавливаем материал модели
+            float[] materialAmbient = { 0.2f, 0.2f, 0.2f, 1.0f };
+            float[] materialDiffuse = { 0.8f, 0.8f, 0.8f, 1.0f };
+            float[] materialSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
+            float shininess = 50.0f;
+
+            gl.Material(SharpGL.OpenGL.GL_FRONT_AND_BACK, SharpGL.OpenGL.GL_AMBIENT, materialAmbient);
+            gl.Material(SharpGL.OpenGL.GL_FRONT_AND_BACK, SharpGL.OpenGL.GL_DIFFUSE, materialDiffuse);
+            gl.Material(SharpGL.OpenGL.GL_FRONT_AND_BACK, SharpGL.OpenGL.GL_SPECULAR, materialSpecular);
+            gl.Material(SharpGL.OpenGL.GL_FRONT_AND_BACK, SharpGL.OpenGL.GL_SHININESS, shininess);
+
+            foreach (var mesh in model.Meshes)
+            {
+                gl.Begin(SharpGL.OpenGL.GL_TRIANGLES);
+
+                foreach (var face in mesh.Faces)
+                {
+                    foreach (var index in face.Indices)
+                    {
+                        var vertex = mesh.Vertices[index];
+
+                        // Используем нормали, если они есть
+                        if (mesh.HasNormals)
+                        {
+                            var normal = mesh.Normals[index];
+                            gl.Normal(normal.X, normal.Y, normal.Z);
+                        }
+
+                        gl.Vertex(vertex.X, vertex.Y, vertex.Z);
+                    }
+                }
+
+                gl.End();
+            }
+            gl.Disable(SharpGL.OpenGL.GL_LIGHTING);
+            gl.Disable(SharpGL.OpenGL.GL_LIGHT0);
+            gl.Disable(SharpGL.OpenGL.GL_LIGHT1);
             gl.Disable(SharpGL.OpenGL.GL_NORMALIZE);
         }
         // Mouse down event
