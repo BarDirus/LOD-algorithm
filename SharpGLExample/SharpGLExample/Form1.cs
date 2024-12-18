@@ -122,7 +122,7 @@ namespace SharpGLExample
     );
                 voxelize = false;
 
-                isVoxelization = true;
+                isVoxelization = false;
                 // Calculate the model center
                 if (model != null && model.Meshes.Count > 0)
                 {
@@ -158,7 +158,7 @@ namespace SharpGLExample
             {
                 voxelize = true;
 
-                isVoxelization = false;
+                isVoxelization = true;
 
                 openGLControl.Invalidate(); //???
             }
@@ -172,7 +172,6 @@ namespace SharpGLExample
             gl.Enable(SharpGL.OpenGL.GL_DEPTH_TEST);
             gl.Enable(SharpGL.OpenGL.GL_LIGHTING);
             gl.Enable(SharpGL.OpenGL.GL_LIGHT0); // Включаем первый источник света
-            gl.Enable(SharpGL.OpenGL.GL_LIGHT1);
             gl.Enable(SharpGL.OpenGL.GL_NORMALIZE);
 
             // Устанавливаем свойства источника света
@@ -250,10 +249,10 @@ namespace SharpGLExample
             float[] diffuseLight1 = { 0.8f, 0.8f, 0.8f, 1.0f };   // Диффузное освещение
             float[] specularLight1 = { 1.0f, 1.0f, 1.0f, 1.0f };  // Зеркальное освещение
 
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_POSITION, lightPosition1);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_AMBIENT, ambientLight1);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight1);
-            gl.Light(SharpGL.OpenGL.GL_LIGHT0, SharpGL.OpenGL.GL_SPECULAR, specularLight1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT1, SharpGL.OpenGL.GL_POSITION, lightPosition1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT1, SharpGL.OpenGL.GL_AMBIENT, ambientLight1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT1, SharpGL.OpenGL.GL_DIFFUSE, diffuseLight1);
+            gl.Light(SharpGL.OpenGL.GL_LIGHT1, SharpGL.OpenGL.GL_SPECULAR, specularLight1);
 
             // Устанавливаем материал модели
             float[] materialAmbient = { 0.2f, 0.2f, 0.2f, 1.0f };
