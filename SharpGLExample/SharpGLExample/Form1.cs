@@ -99,7 +99,7 @@ namespace SharpGLExample
 
                     if (voxelize)
                     {
-                        Voxelization.VoxelizeModel(gl, model, 0.1f);
+                        isVoxelization = true;
                     }
                 }
             }
@@ -158,9 +158,7 @@ namespace SharpGLExample
             {
                 voxelize = true;
 
-                isVoxelization = true;
 
-                openGLControl.Invalidate(); //???
             }
         }
 
@@ -225,6 +223,7 @@ namespace SharpGLExample
         }
         private void DrawModelForVoxelization(SharpGL.OpenGL gl, Assimp.Scene model)
         {
+            Voxelization.VoxelizeModel(gl, model, 0.1f);
             // Включаем освещение и глубину
             gl.Enable(SharpGL.OpenGL.GL_DEPTH_TEST);
             gl.Enable(SharpGL.OpenGL.GL_LIGHTING);

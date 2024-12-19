@@ -106,10 +106,23 @@ namespace SharpGLExample
             DotProduct(axis, new Vector3D(min.X, max.Y, max.Z)),
             DotProduct(axis, new Vector3D(max.X, max.Y, max.Z))
             };
-
+            /**
             float aabbMin = Math.Min(aabbProjections[0], Math.Min(aabbProjections[1], aabbProjections[2]));
             float aabbMax = Math.Max(aabbProjections[0], Math.Max(aabbProjections[1], aabbProjections[2]));
-
+            **/
+            float aabbMin=aabbProjections[0];
+            float aabbMax=aabbProjections[0];
+            for (int i = 0; i <= 7; i++) 
+            { 
+              if(aabbMin > aabbProjections[i]) 
+                {  
+                    aabbMin = aabbProjections[i]; 
+                }
+                if (aabbMax < aabbProjections[i])
+                {
+                    aabbMax = aabbProjections[i];
+                }
+            }
             return triangleMax >= aabbMin && triangleMin <= aabbMax;
         }
 
